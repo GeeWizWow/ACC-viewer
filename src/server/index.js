@@ -11,6 +11,10 @@ const socketServer = io({
 });
 
 app.use(express.static('dist/'));
+app.use('/event', express.static('dist/'));
+app.use('/event/:id', express.static('dist/'));
+app.use('/event/:id/:session', express.static('dist/'));
+app.use('/event/:id/:session/:tab', express.static('dist/'));
 
 resultsParser.init();
 resultsParser.onNewResult(results => socketServer.emit('EVENTS', results));

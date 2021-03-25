@@ -1,4 +1,4 @@
 {
-    "resultsFolder": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Assetto Corsa Competizione Dedicated Server\\server\\results",
+    "resultsFolder": "./test_data",
     "watchIntervalSeconds": 5
 }
