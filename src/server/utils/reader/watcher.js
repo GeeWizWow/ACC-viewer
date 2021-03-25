@@ -72,6 +72,11 @@ class ResultsWatcher {
             throw new Error(`[ERR] Unable to parse filename: ${file}`);
         }
 
+        console.log(fs.readFileSync(
+            path.join(this.resultsFolder, file),
+            ReadOptions,
+        ))
+
         return {
             sessionType: match.groups.sessionType,
             startTime: moment(match.groups.dateTime, 'YY/MM/DD_hhmmss'),
