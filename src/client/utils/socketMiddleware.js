@@ -30,7 +30,7 @@ export class SocketCall {
 }
 
 const createClient = (store) => {
-    const socket = io(`ws://${window.location.host}`, {
+    const socket = io(`wss://${window.location.host}`, {
         path: '/ws',
         autoConnect: false,
         reconnection: true,
