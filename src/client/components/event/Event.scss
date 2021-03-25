@@ -1,0 +1,11 @@
+.flag {
+    height: 70px;
+    width: 100px;
+    overflow: hidden;
+    margin-right: 15px;
+
+    .icon {
+        transform: rotate(-15deg) scale(1.3);
+        transform-origin: center;
+    }
+}
