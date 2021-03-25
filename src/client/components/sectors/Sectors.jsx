@@ -23,8 +23,8 @@ const Sectors = () => {
             {map(sectors, (s, i) =>
                 <Fragment key={i}>
 
-                    <Box elevation={'small'}>
-                        <Box background={'light-1'} pad={'small'} border={'bottom'}>
+                    <Box background={'background-front'} elevation={'small'} >
+                        <Box background={'background-header'} pad={'small'} border={'bottom'}>
                             <Text weight={'bold'}>
                                 Sector {getSectorName(i)}
                             </Text>

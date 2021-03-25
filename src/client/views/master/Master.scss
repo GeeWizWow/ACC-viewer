@@ -5,9 +5,13 @@
     }
 }
 
+.wrapper {
+    min-height: 100vh !important;
+}
+
 .main {
     width: 1152px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 .mainLink {

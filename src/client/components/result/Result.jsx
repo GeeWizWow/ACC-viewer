@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getResultsBySession } from '../../redux/Result';
-import { Box, Text } from 'grommet';
+import { Box, Text, Button } from 'grommet';
 import { getSessionName } from '../../helpers/events';
 import { SessionTypes, CarNames } from '../../helpers/constants';
 import { msToTime } from '../../helpers/session';
@@ -62,11 +62,16 @@ const Result = () => {
     return (
         <Box>
 
-            <Box elevation={'small'}>
+            <Box background={'background-front'} elevation={'small'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'}>
+                    <Text weight={'bold'}>
+                        Session Results
+                    </Text>
+                </Box>
                 {map(listRows, (row, index) => (
                     <Box 
                         key={row.key}
-                        background={index % 2 ? 'white' : 'light-1'}
+                        background={index % 2 ? 'none' : 'background-row'}
                         direction={'row'}
                         justify={'between'}
                         pad={{
@@ -87,7 +92,12 @@ const Result = () => {
 
             <Box margin={'small'} />
 
-            <Box elevation={'small'}>
+            <Box background={'background-front'} elevation={'small'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'}>
+                    <Text weight={'bold'}>
+                        Leaderboard
+                    </Text>
+                </Box>
                 <Table>
                     <TableHeader>
                         <TableRow>

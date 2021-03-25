@@ -4,16 +4,19 @@ import { useSelector } from 'react-redux';
 import { getLapsBySession } from '../../redux/AllLaps';
 import { map } from 'underscore';
 import { Box, Text } from 'grommet';
-import { CarNames } from '../../helpers/constants';
+import { CarNames, SessionTypes } from '../../helpers/constants';
 import { msToTime } from '../../helpers/session';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from 'grommet';
+import LapIcon from '../lap-icon/LapIcon';
 
-const getLapColor = (lap) => {
-    if (!lap.isValid) {
+const getLapColor = (lap, sessionType) => {
+    if (!lap.isValid && sessionType === SessionTypes.R) {
         return null;
     }
 
-    return lap.isOverallBest
+    return !lap.isValid
+        ? 'neutral-4'
+        : lap.isOverallBest
         ? 'brand'
         : lap.isPersonalBest
             ? 'neutral-3'
@@ -42,8 +45,8 @@ const AllLaps = () => {
                 
                 <Fragment key={d.name}>
 
-                    <Box elevation={'small'}>
-                        <Box background={'light-1'} pad={'small'} border={'bottom'}>
+                    <Box background={'background-front'} elevation={'small'}>
+                        <Box background={'background-header'} pad={'small'} border={'bottom'}>
                             <Text weight={'bold'}>
                                 {d.name}
                             </Text>
@@ -52,7 +55,9 @@ const AllLaps = () => {
                             <TableHeader>
                                 <TableRow>
 
-                                    <TableCell scope={'col'} border={'bottom'}>
+                                    <TableCell scope={'col'} border={'bottom'} />
+
+                                    <TableCell scope={'col'} border={'bottom'} align={'center'}>
                                         <Text size={'small'} weight={'bold'}>
                                             Lap
                                         </Text>
@@ -92,46 +97,59 @@ const AllLaps = () => {
                             <TableBody>
                                 {map(d.laps, (lap) =>
                                     <TableRow key={lap.no}>
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap)}>
+                                        <TableCell 
+                                            scope={'row'} 
+                                            border={[ 'bottom', 'right' ]} 
+                                            background={getLapColor(lap, sessionType)} 
+                                            align={'center'}
+                                        >
+                                            <LapIcon 
+                                                isInvalid={!lap.isValid}
+                                                isOverallBest={lap.isOverallBest}
+                                                isPersonalBest={lap.isPersonalBest}
+                                            />
+                                        </TableCell>
+
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)} align={'center'}>
                                             <Text size={'small'}>
                                                 {lap.no}
                                             </Text>
                                         </TableCell>
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap)}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'}>
                                                 {CarNames[lap.car]}
                                             </Text>
                                         </TableCell>
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap)}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'}>
-                                                {lap.isValid
+                                                {(lap.isValid || sessionType === SessionTypes.FP)
                                                     ? msToTime(lap.time)
                                                     : '-'
                                                 }
                                             </Text>
                                         </TableCell>
 
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap)}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[0])}>
-                                                {lap.isValid
+                                                {(lap.isValid || sessionType === SessionTypes.FP)
                                                     ? msToTime(lap.sectors[0].time)
                                                     : '-'
                                                 }
                                             </Text>
                                         </TableCell>
 
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap)}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[1])}>
-                                                {lap.isValid
+                                                {(lap.isValid || sessionType === SessionTypes.FP)
                                                     ? msToTime(lap.sectors[1].time)
                                                     : '-'
                                                 }
                                             </Text>
                                         </TableCell>
 
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap)}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[2])}>
-                                                {lap.isValid
+                                                {(lap.isValid || sessionType === SessionTypes.FP)
                                                     ? msToTime(lap.sectors[2].time)
                                                     : '-'
                                                 }
@@ -141,12 +159,11 @@ const AllLaps = () => {
                                 )}
 
                                 <TableRow>
-                                    <TableCell scope={'row'} border={'bottom'}>
+                                    <TableCell scope={'row'} border={'bottom'} colSpan={3}>
                                         <Text size={'small'}>
                                             Average
                                         </Text>
                                     </TableCell>
-                                    <TableCell scope={'row'} border={'bottom'} />
                                     <TableCell scope={'row'} border={'bottom'}>
                                         <Text size={'small'}>
                                             {d.averageLap
@@ -185,13 +202,11 @@ const AllLaps = () => {
                                 </TableRow>
 
                                 <TableRow>
-                                    <TableCell scope={'row'}>
+                                    <TableCell scope={'row'} colSpan={3}>
                                         <Text size={'small'}>
                                             Best Possible
                                         </Text>
                                     </TableCell>
-
-                                    <TableCell scope={'row'} />
 
                                     <TableCell scope={'row'}>
                                         <Text size={'small'}>

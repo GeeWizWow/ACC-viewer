@@ -8,7 +8,13 @@ const JustTheTip = ({ children, sessionType }) => {
     }
 
     return (
-        <Tip content={getSessionName(sessionType)}>
+        <Tip 
+            content={(
+                <Text size={'small'}>
+                    {getSessionName(sessionType)}
+                </Text>
+            )}
+        >
             {children}
         </Tip>
     );

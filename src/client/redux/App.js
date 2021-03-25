@@ -2,11 +2,13 @@
 //#region Action
 const ns = 'ACC/APP/';
 const INIT = ns + 'INIT';
+const TOGGLE_THEME = ns + 'TOGGLE_THEME';
 //#endregion
 
 //#region Reducer
 const initialState = {
     init: false,
+    theme: localStorage.theme,
 };
 
 export default function (state = initialState, action) {
@@ -14,6 +16,13 @@ export default function (state = initialState, action) {
 
         case INIT: {
             return state;
+        }
+
+        case TOGGLE_THEME: {
+            return {
+                ...state,
+                theme: state.theme === 'dark' ? 'light' : 'dark',
+            };
         }
 
         default: {
@@ -28,10 +37,19 @@ const getState = (state) => {
     return state.App;
 };
 
-const getIsInit = (state) => {
-    return getState(state).init;
+export const getTheme = (state) => {
+    return getState(state).theme;
 };
 //#endregion
 
 //#region Actions
+export const toggleTheme = () => {
+    return (dispatch, getState) => {
+        const theme = getTheme(getState());
+        localStorage.theme = theme === 'dark' ? 'light' : 'dark';
+        return dispatch({
+            type: TOGGLE_THEME,
+        });
+    };
+}
 //#endregion

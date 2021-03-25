@@ -3,10 +3,11 @@ import { ResponsiveLine } from '@nivo/line'
 import { Box, Text } from 'grommet';
 import Dot from '../dot/Dot'
 
-export default ({ data }) => (
+export default ({ data, theme }) => (
     <ResponsiveLine
         data={data}
         margin={{ top: 30, right: 30, bottom: 130, left: 30 }}
+        colors={{ scheme: theme === 'dark' ? 'dark2' : 'nivo' }}
         xScale={{ 
             type: 'linear', 
             min: '1',
@@ -32,8 +33,11 @@ export default ({ data }) => (
             tickRotation: 0,
             format: tick => tick % 1 === 0 ? tick : '',
         }}
+        theme={{
+            textColor: theme === 'dark' ? '#EEEEEE' : '#333333',
+        }}
         tooltip={({ point: { serieColor, serieId, data: { x: lap, y: pos }}}) => 
-            <Box elevation={'small'} pad={'xsmall'} background={'white'}>
+            <Box pad={'xsmall'} background={'white'} round={'xsmall'}>
                 <Box direction={'row'} gap={'small'} align={'center'}>
                     <Dot color={serieColor} />
                     <Text size={'small'} weight={'bold'}>

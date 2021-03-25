@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Separator from '../separator/Separator';
 import { Box, Text, Grid, Image, List } from 'grommet';
 import { getTrackFlag, getTrackFriendlyName } from '../../helpers/tracks';
 import styles from './Event.scss';
@@ -20,13 +19,13 @@ const Event = ({ track, startTime, sessionTypes, id }) => {
             round={false}
             onClick={onClick}
             overflow={'hidden'}
-            elevation={'small'}
             hoverIndicator={true}
-            // background={'light-1'}
+            background={'background-front'}
             direction={'row'}
             align={'center'}
             justify={'between'}
             pad={{ right: 'medium' }}
+            elevation={'small'}
         >
 
             <Box direction={'row'} align={'center'}>
@@ -39,10 +38,10 @@ const Event = ({ track, startTime, sessionTypes, id }) => {
                     />
                 </div>
                 <Box direction={'column'}>
-                    <Text>
+                    <Text weight={'bold'}>
                         {getTrackFriendlyName(track)}
                     </Text>
-                    <Text size={'small'} color={'dark-4'}>
+                    <Text size={'small'} color={'text-weak'}>
                         {moment(startTime).format('lll')}
                     </Text>
                 </Box>

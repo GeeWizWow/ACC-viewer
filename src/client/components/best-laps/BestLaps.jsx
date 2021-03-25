@@ -17,8 +17,8 @@ const BestLaps = () => {
     return (
         <Box>
 
-            <Box elevation={'small'}>
-                <Box background={'light-1'} pad={'small'} border={'bottom'}>
+            <Box background={'background-front'} elevation={'small'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'}>
                     <Text weight={'bold'}>
                         Per Driver
                     </Text>
@@ -88,8 +88,8 @@ const BestLaps = () => {
 
             <Box margin={'small'} />
 
-            <Box elevation={'small'}>
-                <Box background={'light-1'} pad={'small'} border={'bottom'}>
+            <Box background={'background-front'} elevation={'small'}>
+                <Box background={'background-contrast'} pad={'small'} border={'bottom'}>
                     <Text weight={'bold'}>
                         Overall Top 20
                     </Text>

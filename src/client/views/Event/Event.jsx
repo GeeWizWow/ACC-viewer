@@ -63,7 +63,7 @@ const Event = () => {
                     {event.track.toUpperCase()}
                 </Heading>
 
-                <Text size={'small'} color={'dark-4'}>
+                <Text size={'small'} color={'text-weak'}>
                     {moment(event.startTime).format('lll')}
                 </Text>
             </Box>
@@ -76,13 +76,14 @@ const Event = () => {
                 gap={'medium'}
             >
 
-                <Sidebar background="light-1" elevation={'small'}>
+                <Box background={'background-front'} pad={'small'} gap={'large'} elevation={'small'}>
                     <Nav gap="small">
 
                         {map(event.sessions, s => 
                             <Fragment key={s}>
                                 <Heading 
                                     level={4} 
+                                    size={'medium'}
                                     margin={{ 
                                         vertical: 'small'
                                     }}
@@ -99,9 +100,10 @@ const Event = () => {
                                     >
                                         <Anchor
                                             icon={( <FormNext /> )}
+                                            size={'small'}
                                             as={'span'}
                                             weight={'normal'}
-                                            color={'dark-2'}
+                                            color={'text-weak'}
                                             label={category.label}
                                         />
                                     </Link>
@@ -112,7 +114,7 @@ const Event = () => {
                         )}
                        
                     </Nav>
-                </Sidebar>
+                </Box>
 
                 <Box>
                     <Switch>
