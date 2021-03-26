@@ -10,9 +10,9 @@ import { Table, TableHeader, TableBody, TableRow, TableCell } from 'grommet';
 import LapIcon from '../lap-icon/LapIcon';
 
 const getLapColor = (lap, sessionType) => {
-    if (!lap.isValid && sessionType === SessionTypes.R) {
-        return null;
-    }
+    // if (!lap.isValid && sessionType === SessionTypes.R) {
+    //     return null;
+    // }
 
     return !lap.isValid
         ? 'neutral-4'
@@ -30,7 +30,7 @@ const getSectorProps = (lap, sector) => {
 
     return {
         weight: sector.isOverallBest ? 'bold' : null,
-        color: sector.isPersonalBest ? 'status-critical' : null,
+        color: sector.isPersonalBest ? 'status-ok' : null,
     };
 };
 
@@ -122,37 +122,25 @@ const AllLaps = () => {
                                         </TableCell>
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'}>
-                                                {(lap.isValid || sessionType === SessionTypes.FP)
-                                                    ? msToTime(lap.time)
-                                                    : '-'
-                                                }
+                                                {msToTime(lap.time)}
                                             </Text>
                                         </TableCell>
 
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[0])}>
-                                                {(lap.isValid || sessionType === SessionTypes.FP)
-                                                    ? msToTime(lap.sectors[0].time)
-                                                    : '-'
-                                                }
+                                                {msToTime(lap.sectors[0].time)}
                                             </Text>
                                         </TableCell>
 
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[1])}>
-                                                {(lap.isValid || sessionType === SessionTypes.FP)
-                                                    ? msToTime(lap.sectors[1].time)
-                                                    : '-'
-                                                }
+                                                {msToTime(lap.sectors[1].time)}
                                             </Text>
                                         </TableCell>
 
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[2])}>
-                                                {(lap.isValid || sessionType === SessionTypes.FP)
-                                                    ? msToTime(lap.sectors[2].time)
-                                                    : '-'
-                                                }
+                                                {msToTime(lap.sectors[2].time)}
                                             </Text>
                                         </TableCell>
                                     </TableRow>
