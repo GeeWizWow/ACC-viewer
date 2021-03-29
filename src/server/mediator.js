@@ -265,7 +265,7 @@ export default class SimresultsMediator {
                     );
 
                     return {
-                        id: part.getDriver().getName(),
+                        id: id,
                         data: data,
                     };
                 }); 
