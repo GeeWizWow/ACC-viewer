@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getLapsBySession } from '../../redux/AllLaps';
+import { getLapsBySession } from '../../redux/SimResults';
 import { map } from 'underscore';
 import { Box, Text } from 'grommet';
-import { CarNames, SessionTypes } from '../../helpers/constants';
-import { msToTime } from '../../helpers/session';
+import { msToTime } from '../../helpers/events';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from 'grommet';
 import LapIcon from '../lap-icon/LapIcon';
 
@@ -14,7 +13,7 @@ const getLapColor = (lap, sessionType) => {
     //     return null;
     // }
 
-    return !lap.isValid
+    return !lap.time
         ? 'neutral-4'
         : lap.isOverallBest
         ? 'brand'
@@ -24,7 +23,7 @@ const getLapColor = (lap, sessionType) => {
 };
 
 const getSectorProps = (lap, sector) => {
-    if (!lap.isValid) {
+    if (!lap.time) {
         return {};
     }
 
@@ -104,7 +103,7 @@ const AllLaps = () => {
                                             align={'center'}
                                         >
                                             <LapIcon 
-                                                isInvalid={!lap.isValid}
+                                                isInvalid={!lap.time}
                                                 isOverallBest={lap.isOverallBest}
                                                 isPersonalBest={lap.isPersonalBest}
                                             />
@@ -117,30 +116,42 @@ const AllLaps = () => {
                                         </TableCell>
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'}>
-                                                {CarNames[lap.car]}
+                                                {lap.car}
                                             </Text>
                                         </TableCell>
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'}>
-                                                {msToTime(lap.time)}
+                                                {lap.time 
+                                                    ? msToTime(lap.time)
+                                                    : '-'
+                                                }
                                             </Text>
                                         </TableCell>
 
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[0])}>
-                                                {msToTime(lap.sectors[0].time)}
+                                                {lap.time 
+                                                    ? msToTime(lap.sectors[0].time)
+                                                    : '-'
+                                                }
                                             </Text>
                                         </TableCell>
 
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[1])}>
-                                                {msToTime(lap.sectors[1].time)}
+                                                {lap.time 
+                                                    ? msToTime(lap.sectors[1].time)
+                                                    : '-'
+                                                }
                                             </Text>
                                         </TableCell>
 
                                         <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'} {...getSectorProps(lap, lap.sectors[2])}>
-                                                {msToTime(lap.sectors[2].time)}
+                                                {lap.time 
+                                                    ? msToTime(lap.sectors[2].time)
+                                                    : '-'
+                                                }
                                             </Text>
                                         </TableCell>
                                     </TableRow>
@@ -154,8 +165,8 @@ const AllLaps = () => {
                                     </TableCell>
                                     <TableCell scope={'row'} border={'bottom'}>
                                         <Text size={'small'}>
-                                            {d.averageLap
-                                                ? msToTime(d.averageLap)
+                                            {d.average.time
+                                                ? msToTime(d.average.time)
                                                 : '-'
                                             }
                                         </Text>
@@ -163,8 +174,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'} border={'bottom'}>
                                         <Text size={'small'}>
-                                            {d.averageLap
-                                                ? msToTime(d.averageSectors[0])
+                                            {d.average.time
+                                                ? msToTime(d.average.sectors[0])
                                                 : '-'
                                             }
                                         </Text>
@@ -172,8 +183,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'} border={'bottom'}>
                                         <Text size={'small'}>
-                                            {d.averageLap
-                                                ? msToTime(d.averageSectors[1])
+                                            {d.average.time
+                                                ? msToTime(d.average.sectors[1])
                                                 : '-'
                                             }
                                         </Text>
@@ -181,8 +192,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'} border={'bottom'}>
                                         <Text size={'small'}>
-                                            {d.averageLap
-                                                ? msToTime(d.averageSectors[2])
+                                            {d.average.time
+                                                ? msToTime(d.average.sectors[2])
                                                 : '-'
                                             }
                                         </Text>
@@ -198,8 +209,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'}>
                                         <Text size={'small'}>
-                                            {d.bestPossibleLap
-                                                ? msToTime(d.bestPossibleLap)
+                                            {d.bestPossible.time
+                                                ? msToTime(d.bestPossible.time)
                                                 : '-'
                                             }
                                         </Text>
@@ -207,8 +218,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'}>
                                         <Text size={'small'}>
-                                            {d.bestPossibleLap
-                                                ? msToTime(d.bestPossibleSectors[0])
+                                            {d.bestPossible.time
+                                                ? msToTime(d.bestPossible.sectors[0])
                                                 : '-'
                                             }
                                         </Text>
@@ -216,8 +227,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'}>
                                         <Text size={'small'}>
-                                            {d.bestPossibleLap
-                                                ? msToTime(d.bestPossibleSectors[1])
+                                            {d.bestPossible.time
+                                                ? msToTime(d.bestPossible.sectors[1])
                                                 : '-'
                                             }
                                         </Text>
@@ -225,8 +236,8 @@ const AllLaps = () => {
 
                                     <TableCell scope={'row'}>
                                         <Text size={'small'}>
-                                            {d.bestPossibleLap
-                                                ? msToTime(d.bestPossibleSectors[2])
+                                            {d.bestPossible.time
+                                                ? msToTime(d.bestPossible.sectors[2])
                                                 : '-'
                                             }
                                         </Text>

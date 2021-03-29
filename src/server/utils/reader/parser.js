@@ -1,18 +1,20 @@
-const cacheLayer = require('../cache');
-const resultsReader = require('./watcher');
-const { last, rest } = require('underscore');
+import moment from 'moment';
+import { last } from 'underscore';
+import { AccReader } from 'simresults';
 
 const ResultsCacheKey = 'Parser_Result_Groups';
 
 class ResultsParser {
 
     constructor(reader, cache) {
+        this._init = false;
         this._cache = cache;
         this._reader = reader;
         this._callbacks = [];
     }
 
     init() {
+        this._init = true;
         this._initAllSessions();
 
         this._reader.watch();
@@ -20,6 +22,10 @@ class ResultsParser {
     }
 
     getAllResults() {
+        if (!this._init) {
+            this.init();
+        }
+
         return this._cache.get(ResultsCacheKey);
     }
 
@@ -33,10 +39,12 @@ class ResultsParser {
             allResults
                 // /!\ Ignore any sessions with a raceWeekendIndex of -1, these appear to be staging sessions?
                 .filter(r => r.session.raceWeekendIndex > -1)
+                // /!\ Ignore any sessions wth no laps
+                .filter(r => r.session.laps.length > 0)
+                // /!\ Ignore any sessions wth no participants
+                .filter(r => r.session.sessionResult.leaderBoardLines.length > 0)
                 // Sort all the sessions in the order they happened, from top (oldest) to bottom (newest)
                 .sort((a, b) => a.startTime > b.startTime)
-                // Lap one times can be bugged on ACC, 30+ mins, fix them here
-                .map(r => this._applyLapOneFix(r))
                 // Now that we have all the sessions in order, attempt to group them together
                 // the grouping strategy is as follows
                 // trackName must match, serverName must match, raceWeekendIndex must match, sessionIndex must be sequential
@@ -48,70 +56,53 @@ class ResultsParser {
     }
 
     _updateSessions(result) {
-        const fixedResult = this._applyLapOneFix(result);
+        const ignore = (
+            // /!\ Ignore any sessions with a raceWeekendIndex of -1, these appear to be staging sessions?
+            result.session.raceWeekendIndex === -1
+            // /!\ Ignore any sessions wth no laps
+            || result.session.laps.length === 0
+            // /!\ Ignore any sessions wth no participants
+            || result.session.sessionResult.leaderBoardLines.length === 0
+        );
+
+        if (ignore) {
+            return;
+        }
+
         const oldSessions = this._cache.get(ResultsCacheKey);
-        const updatedSessions = this._groupSessions(oldSessions, fixedResult);
+        const updatedSessions = this._groupSessions(oldSessions, result);
 
         this._cache.set(ResultsCacheKey, updatedSessions);
         this._callbacks.forEach(callback => callback(updatedSessions));
     }
 
     _groupSessions(agg, result) {
+
+        const session = (
+            new AccReader(result.session)
+                .getSession()
+                .setDate(moment(result.startTime).toDate())
+        );
+
         const currentGroup = last(agg);
         const previousSession = last(currentGroup);
         const useCurrentGroup = (
             previousSession
-            && result.session.trackName === previousSession.session.trackName
-            && result.session.serverName === previousSession.session.serverName
-            && result.session.raceWeekendIndex === previousSession.session.raceWeekendIndex
-            && result.session.sessionIndex > previousSession.session.sessionIndex
+            && session.getTrack().getVenue() === previousSession.getTrack().getVenue()
+            && session.getServer().getName() === previousSession.getServer().getName()
+            && session.getRaceWeekendIndex() === previousSession.getRaceWeekendIndex()
+            && session.getSessionIndex() > previousSession.getSessionIndex()
         );
 
         if (useCurrentGroup) {
-            currentGroup.push(result);
+            currentGroup.push(session);
             agg[agg.length - 1] = currentGroup;
         } else {
-            agg.push([ result ]);
+            agg.push([ session ]);
         }
 
         return agg;
     }
-
-    _applyLapOneFix = (result) => {
-        if (
-            result.session.sessionType !== 'R'
-            || result.session.laps.length === 0
-        ) {
-            return result;
-        }
-
-        // Grab a list of all entrants and their total race time
-        const entrants = result.session.sessionResult.leaderBoardLines.map(entry => entry.car.carId);
-    
-        entrants.forEach((carId) => {
-    
-            // Grab a list of every first sector time this car posted
-            const raceSplits = result.session.laps
-                .filter(l => l.carId === carId)
-                .reduce((agg, l) => [ ...agg, l.splits[0] ], []);
-    
-            // Discard the first entry, as it contains the error
-            // and average the remaining ones, including a increment of 5 seconds to simulate the grid start additional time
-            const adjustedFirstSplit = (
-                (rest(raceSplits).reduce((agg, split) => agg + split, 0) / (raceSplits.length - 1)) + 5000
-            );
-    
-            // find the affected lap, and replace it's first sector time 
-            // with the new one we calculated
-            const lapIndex = result.session.laps.findIndex(l => l.carId === carId);
-    
-            result.session.laps[lapIndex].splits[0] = adjustedFirstSplit;
-            result.session.laps[lapIndex].laptime = result.session.laps[lapIndex].splits.reduce((agg, split) => agg + split, 0);
-        });
-       
-        return result;
-    };
-
 };
 
-module.exports = new ResultsParser(resultsReader, cacheLayer);
+export default ResultsParser;

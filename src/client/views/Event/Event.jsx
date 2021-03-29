@@ -4,16 +4,16 @@ import SessionIcon from '../../components/session-icon/SessionIcon';
 import { map } from 'underscore';
 import { Link, Route, Switch, useParams, useRouteMatch, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getEventById } from '../../redux/EventDetails';
+import { getEventById } from '../../redux/SimResults';
 import { getSessionName } from '../../helpers/events';
 import { SessionTypes } from '../../helpers/constants';
-import { Box, Heading, Text, Sidebar, Nav, Grid, Anchor } from 'grommet';
+import { Box, Heading, Text, Nav, Grid, Anchor } from 'grommet';
 import { FormNext } from 'grommet-icons';
 
 import Result from '../../components/result/Result';
 import AllLaps from '../../components/all-laps/AllLaps';
 import BestLaps from '../../components/best-laps/BestLaps';
-// import Consistency from '../../components/consistency/Consistency';
+import Consistency from '../../components/consistency/Consistency';
 import Sectors from '../../components/sectors/Sectors';
 import Positions from '../../components/positions/Positions';
 // import Gaps from '../../components/gaps/Gaps';
@@ -24,7 +24,7 @@ const getSessionCategories = (sessionType) => {
         { label: 'Result', href: 'result', component: Result },
         { label: 'All Laps', href: 'laps', component: AllLaps },
         { label: 'Best Laps', href: 'bestlaps', component: BestLaps },
-        // { label: 'Consistency', href: 'consistency', component: Consistency },
+        { label: 'Consistency', href: 'consistency', component: Consistency },
         { label: 'Sectors', href: 'sectors', component: Sectors },
     ];
 
@@ -64,7 +64,7 @@ const Event = () => {
                 </Heading>
 
                 <Text size={'small'} color={'text-weak'}>
-                    {moment(event.startTime).format('lll')}
+                    {moment(event.time).format('lll')}
                 </Text>
             </Box>
 

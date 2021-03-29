@@ -2,7 +2,7 @@ import React from 'react';
 import NivoChart from './NivoChart';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getRacePositionsBySession } from '../../redux/Race';
+import { getRacePositionsBySession } from '../../redux/SimResults';
 import { getTheme } from '../../redux/App';
 import { Box } from 'grommet';
 

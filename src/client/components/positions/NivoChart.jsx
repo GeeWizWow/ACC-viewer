@@ -10,7 +10,7 @@ export default ({ data, theme }) => (
         colors={{ scheme: theme === 'dark' ? 'dark2' : 'nivo' }}
         xScale={{ 
             type: 'linear', 
-            min: '1',
+            min: '2',
         }}
         yScale={{ 
             type: 'linear', 

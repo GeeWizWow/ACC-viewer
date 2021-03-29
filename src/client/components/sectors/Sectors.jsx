@@ -2,10 +2,9 @@ import React, { Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { map } from 'underscore';
-import { getSectorsBySession } from '../../redux/Sectors';
+import { getSectorsBySession } from '../../redux/SimResults';
 import { Box, Text } from 'grommet';
-import { CarNames } from '../../helpers/constants';
-import { msToTime } from '../../helpers/session';
+import { msToTime } from '../../helpers/events';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from 'grommet';
 
 const getSectorName = (i) => {
@@ -45,6 +44,12 @@ const Sectors = () => {
                                         </Text>
                                     </TableCell>
 
+                                    <TableCell scope={'col'} border={'bottom'} align={'center'}>
+                                        <Text size={'small'} weight={'bold'}>
+                                            Lap
+                                        </Text>
+                                    </TableCell>
+
                                     <TableCell scope={'col'} border={'bottom'}>
                                         <Text size={'small'} weight={'bold'}>
                                             Time
@@ -69,7 +74,12 @@ const Sectors = () => {
                                         </TableCell>
                                         <TableCell scope={'row'} border={index !== s.length - 1 && 'bottom'}>
                                             <Text size={'small'}>
-                                                {CarNames[lap.car]}
+                                                {lap.car}
+                                            </Text>
+                                        </TableCell>
+                                        <TableCell scope={'row'} border={index !== s.length - 1 && 'bottom'} align={'center'}>
+                                            <Text size={'small'}>
+                                                {lap.no}
                                             </Text>
                                         </TableCell>
                                         <TableCell scope={'row'} border={index !== s.length - 1 && 'bottom'}>

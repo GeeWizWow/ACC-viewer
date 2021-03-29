@@ -54,7 +54,7 @@ const Master = () => {
                 >
                     <Switch>
                         <Route path={'/event/:id'} component={EventDetails} />
-                        <Route path={'/'} component={Events} />
+                        <Route path={'/'} component={Events} /> 
                     </Switch>
                 </Box>
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, Tip } from 'grommet';
-import { getSessionName, getSessionColor } from '../../helpers/events';
+import { getSessionName, getSessionColor, getSessionSymbol } from '../../helpers/events';
 
 const JustTheTip = ({ children, sessionType }) => {
     if (!sessionType) {
@@ -21,7 +21,6 @@ const JustTheTip = ({ children, sessionType }) => {
 };
 
 const SessionIcon = ({ sessionType }) => {
-
     return (
         <JustTheTip sessionType={sessionType}>
             <Text
@@ -29,7 +28,7 @@ const SessionIcon = ({ sessionType }) => {
                 textAlign={'end'}
                 color={getSessionColor(sessionType)}
             >
-                {sessionType || 'X'}
+                {getSessionSymbol(sessionType) || 'X'}
             </Text>
         </JustTheTip>
     );
