@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getEvents } from '../../redux/Events';
+import { getEvents } from '../../redux/SimResults';
 import { map } from 'underscore';
 import { Box, Grid, Heading } from 'grommet';
 import Event from '../../components/event/Event';

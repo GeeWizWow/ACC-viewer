@@ -15,6 +15,10 @@ class Cache {
     remove(key) {
         delete this.cache[key];
     }
+
+    invalidate() {
+        this.cache = {};
+    }
 }
 
-module.exports = new Cache();
+export default Cache;

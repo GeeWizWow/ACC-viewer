@@ -2,17 +2,17 @@ import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { Box, Text, Grid, Image, List } from 'grommet';
-import { getTrackFlag, getTrackFriendlyName } from '../../helpers/tracks';
+import { Box, Text, Grid, Image } from 'grommet';
+import { getTrackFlag, getTrackFriendlyName } from '../../helpers/events';
 import styles from './Event.scss';
 import SessionIcon from '../session-icon/SessionIcon';
 import { map, range } from 'underscore';
 
 
-const Event = ({ track, startTime, sessionTypes, id }) => {
+const Event = ({ track, startTime, sessions, id }) => {
 
     const history = useHistory();
-    const onClick = useCallback(() => history.push(`/event/${id}/${sessionTypes[0]}/result`), [ id ]);
+    const onClick = useCallback(() => history.push(`/event/${id}/${sessions[0]}/result`), [ id ]);
 
     return (
         <Box
@@ -53,13 +53,13 @@ const Event = ({ track, startTime, sessionTypes, id }) => {
                 columns={[ 'flex', 'flex', 'flex' ]}
                 gap={'small'}
             >
-                {map(sessionTypes, s => 
+                {map(sessions, s => 
                     <SessionIcon 
                         key={s}
                         sessionType={s} 
                     />
                 )}
-                {map(range(3 - sessionTypes.length), (i) =>
+                {map(range(3 - sessions.length), (i) =>
                     <SessionIcon key={i} />
                 )}
             </Grid>

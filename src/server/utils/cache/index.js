@@ -1,2 +1,4 @@
 
-module.exports = require('./dumbCache');
+import DumbCache from './dumbCache';
+
+export default DumbCache;

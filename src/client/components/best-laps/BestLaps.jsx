@@ -2,10 +2,9 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { map } from 'underscore';
-import { getDriverLapsBySession, getTopLapsBySession } from '../../redux/BestLaps';
+import { getDriverLapsBySession, getTopLapsBySession } from '../../redux/SimResults';
 import { Box, Text } from 'grommet';
-import { CarNames } from '../../helpers/constants';
-import { msToTime } from '../../helpers/session';
+import { msToTime } from '../../helpers/events';
 import { Table, TableHeader, TableBody, TableRow, TableCell } from 'grommet';
 
 const BestLaps = () => {
@@ -39,6 +38,12 @@ const BestLaps = () => {
                                 </Text>
                             </TableCell>
 
+                            <TableCell scope={'col'} border={'bottom'} align={'center'}>
+                                <Text size={'small'} weight={'bold'}>
+                                    Lap
+                                </Text>
+                            </TableCell>
+
                             <TableCell scope={'col'} border={'bottom'}>
                                 <Text size={'small'} weight={'bold'}>
                                     Time
@@ -63,7 +68,12 @@ const BestLaps = () => {
                                 </TableCell>
                                 <TableCell scope={'row'} border={index !== driverLaps.length - 1 && 'bottom'}>
                                     <Text size={'small'}>
-                                        {CarNames[lap.car]}
+                                        {lap.car}
+                                    </Text>
+                                </TableCell>
+                                <TableCell scope={'row'} border={index !== driverLaps.length - 1 && 'bottom'} align={'center'}>
+                                    <Text size={'small'}>
+                                        {lap.no}
                                     </Text>
                                 </TableCell>
                                 <TableCell scope={'row'} border={index !== driverLaps.length - 1 && 'bottom'}>
@@ -89,7 +99,7 @@ const BestLaps = () => {
             <Box margin={'small'} />
 
             <Box background={'background-front'} elevation={'small'}>
-                <Box background={'background-contrast'} pad={'small'} border={'bottom'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'}>
                     <Text weight={'bold'}>
                         Overall Top 20
                     </Text>
@@ -107,6 +117,12 @@ const BestLaps = () => {
                             <TableCell scope={'col'} border={'bottom'}>
                                 <Text size={'small'} weight={'bold'}>
                                     Car
+                                </Text>
+                            </TableCell>
+
+                            <TableCell scope={'col'} border={'bottom'} align={'center'}>
+                                <Text size={'small'} weight={'bold'}>
+                                    Lap
                                 </Text>
                             </TableCell>
 
@@ -134,7 +150,12 @@ const BestLaps = () => {
                                 </TableCell>
                                 <TableCell scope={'row'} border={index !== topLaps.length - 1 && 'bottom'}>
                                     <Text size={'small'}>
-                                        {CarNames[lap.car]}
+                                        {lap.car}
+                                    </Text>
+                                </TableCell>
+                                <TableCell scope={'row'} border={index !== topLaps.length - 1 && 'bottom'} align={'center'}>
+                                    <Text size={'small'}>
+                                        {lap.no}
                                     </Text>
                                 </TableCell>
                                 <TableCell scope={'row'} border={index !== topLaps.length - 1 && 'bottom'}>

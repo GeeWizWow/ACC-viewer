@@ -1,5 +1,4 @@
-import { last } from 'underscore';
-import { SessionTypes } from './constants';
+import { SessionTypes, Tracks } from './constants';
 
 export const getSessionName = (sessionType) => {
     switch (sessionType) {
@@ -9,6 +8,17 @@ export const getSessionName = (sessionType) => {
             return 'Qualifying';
         case SessionTypes.R:
             return 'Race';
+    }
+};
+
+export const getSessionSymbol = (sessionType) => {
+    switch (sessionType) {
+        case SessionTypes.FP:
+            return 'FP';
+        case SessionTypes.Q:
+            return 'Q';
+        case SessionTypes.R:
+            return 'R';
     }
 };
 
@@ -25,69 +35,136 @@ export const getSessionColor = (sessionType) => {
     }
 };
 
-export const getTrackName = (sessions) => {
-    return last(sessions).session.trackName;
-};
+export const msToTime = (seconds, forceHours = false) => {
+    const isNegative = seconds < 0;
+    const time = isNegative ? Math.abs(seconds) : seconds;
 
-export const getStartTime = (sessions) => {
-    return last(sessions).startTime;
-};
+    const roundSeconds = Math.trunc(time);
+    const hours = Math.floor(roundSeconds / 3600);
+    const minutes = Math.floor((roundSeconds - (hours * 3600)) / 60);
+    const secs = Math.floor((roundSeconds - (hours * 3600) - (minutes * 60)));
+    const secsMicro = seconds - roundSeconds + secs;
 
-export const getSessionTypes = (sessions) => {
-    return sessions.map(s => s.sessionType);
-};
+    const secsFormatted = secsMicro.toFixed(4).padStart(7, '0');
+    const minsFormatted = minutes.toFixed(0).padStart(2, '0');
 
-export const getLapCount = (sessions) => {
-    const results = { max: 0 };
-    const everyLap = last(sessions).session.laps;
+    let format = `${minsFormatted}:${secsFormatted}`;
 
-    if (!everyLap || !everyLap.length === 0) {
-        return 0;
+    if (hours || forceHours) {
+        const hoursFormatted = hours.toFixed(0).padStart(2, '0');
+        format = `${hoursFormatted}:${format}`;
     }
 
-    everyLap.forEach(lap => {
-
-        results[lap.carId] = (results[lap.carId] && results[lap.carId] + 1) || 1;
-        results.max = results[lap.carId] > results.max ? results[lap.carId] : results.max;
-
-    });
-
-    return results.max;
-};
-
-export const getEntrantsCount = (sessions) => {
-    const results = { count: 0 };
-    const everyLap = last(sessions).session.laps;
-
-    if (!everyLap || !everyLap.length === 0) {
-        return 0;
+    if (isNegative) {
+        format = `-${format}`;
     }
 
-    everyLap.forEach(lap => {
+    return format;
+};
 
-        results.count = results[lap.carId] ? results.count : results.count + 1;
-        results[lap.carId] = true;
+
+export const getTrackFlag = (trackName) => {
+    let iconName = '';
+
+    switch (trackName) {
+        case Tracks.misano:
+        case Tracks.misano_2019:
+        case Tracks.misano_2020:
+        case Tracks.imola_2020:
+        case Tracks.monza:
+        case Tracks.monza_2019:
+        case Tracks.monza_2020: {
+            iconName = 'Italy.svg';
+            break;
+        }
         
-    });
+        case Tracks.spa:
+        case Tracks.spa_2019:
+        case Tracks.spa_2020:
+        case Tracks.zolder:
+        case Tracks.zolder_2019:
+        case Tracks.zolder_2020: {
+            iconName = 'Belgium.svg';
+            break;
+        }
 
-    return results.count;
-};
+        case Tracks.oulton_park_2019:
+        case Tracks.oulton_park_2020:
+        case Tracks.donington_2019:
+        case Tracks.donington_2020:
+        case Tracks.silverstone:
+        case Tracks.silverstone_2019:
+        case Tracks.silverstone_2020:
+        case Tracks.brands_hatch:
+        case Tracks.brands_hatch_2019:
+        case Tracks.brands_hatch_2020: {
+            iconName = 'GreatBritain.svg';
+            break;
+        }
 
-export const getEventKey = (sessions) => {
-    const startTime = getStartTime(sessions);
+        case Tracks.paul_ricard:
+        case Tracks.paul_ricard_2019:
+        case Tracks.paul_ricard_2020: {
+            iconName = 'France.svg';
+            break;
+        }
 
-    // https://stackoverflow.com/a/7616484
-    let hash = 0;
-    let i; 
-    let chr;
+        case Tracks.nurburgring:
+        case Tracks.nurburgring_2019:
+        case Tracks.nurburgring_2020: {
+            iconName = 'Germany.svg';
+            break;
+        }
 
-    for (i = 0; i < startTime.length; i++) {
-        chr = startTime.charCodeAt(i);
-        hash = ((hash << 5) - hash) + chr;
-        hash |= 0; // Convert to 32bit integer
+        case Tracks.barcelona:
+        case Tracks.barcelona_2019:
+        case Tracks.barcelona_2020: {
+            iconName = 'Spain.svg';
+            break;
+        }
+
+        case Tracks.hungaroring:
+        case Tracks.hungaroring_2019:
+        case Tracks.hungaroring_2020: {
+            iconName = 'Hungary.svg';
+            break;
+        }
+
+        case Tracks.zandvoort:
+        case Tracks.zandvoort_2019:
+        case Tracks.zandvoort_2020: {
+            iconName = 'Netherlands.svg';
+            break;
+        }
+
+        case Tracks.mount_panorama_2019:
+        case Tracks.mount_panorama_2020: {
+            iconName = 'Australia.svg';
+            break;
+        }
+
+        case Tracks.kyalami_2019:
+        case Tracks.kyalami_2020: {
+            iconName = 'SouthAfrica.svg';
+            break;
+        }
+
+        case Tracks.suzuka_2019:
+        case Tracks.suzuka_2020: {
+            iconName = 'Japan.svg';
+            break;
+        }
+
+        case Tracks.laguna_seca_2019:
+        case Tracks.laguna_seca_2020: {
+            iconName = 'USA.svg';
+            break;
+        }
     }
-    
-    return hash;
+
+    return require(`../images/flags/${iconName}`);
 };
 
-
+export const getTrackFriendlyName = (trackName) => {
+    return trackName.toUpperCase();
+};

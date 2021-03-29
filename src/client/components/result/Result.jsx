@@ -1,11 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getResultsBySession } from '../../redux/Result';
-import { Box, Text, Button } from 'grommet';
-import { getSessionName } from '../../helpers/events';
-import { SessionTypes, CarNames } from '../../helpers/constants';
-import { msToTime } from '../../helpers/session';
+import { getResultsBySession } from '../../redux/SimResults';
+import { Box, Text } from 'grommet';
+import { getSessionName, msToTime } from '../../helpers/events';
+import { SessionTypes } from '../../helpers/constants';
 import { first, map } from 'underscore';
 
 import { Table, TableHeader, TableBody, TableRow, TableCell } from 'grommet';
@@ -15,17 +14,17 @@ const Result = () => {
     const result = useSelector(s => getResultsBySession(s, id, sessionType));
 
     let listRows = [
-        { key: 'Session', value: getSessionName(sessionType) },
+        { key: 'Session', value: getSessionName(result.type) },
         { key: 'Track', value: result.track.toUpperCase() },
         { key: 'Lasted laps', value: result.lastedLaps },
-        { key: 'Best lap', value: result.bestLap.time ? `${result.bestLap.driver} (${result.bestLap.time})` : '-' },
+        { key: 'Best lap', value: result.bestlap ? `${result.bestlapDriver} (${msToTime(result.bestlap)})` : '-' },
     ];
 
     if (sessionType === SessionTypes.R) {
         listRows = [
             ...listRows,
             { key: 'Winner', value: result.winner || '-' },
-            { key: 'Led Most Laps', value: result.ledMostLaps || '-' },
+            { key: 'Led Most Laps', value: result.ledMost || '-' },
         ];
     }
 
@@ -33,9 +32,9 @@ const Result = () => {
         { property: 'position', header: 'Pos', align: 'center' },
         { property: 'no', header: 'No', align: 'center' },
         { property: 'driver', header: 'Driver' },
-        { property: 'car', header: 'Car', render: ({ car }) => CarNames[car] },
+        { property: 'car', header: 'Car' },
         { property: 'laps', header: 'Laps', align: 'center' },
-        { property: 'bestLap', header: 'Best lap', render: ({ bestLap }) => bestLap ? msToTime(bestLap) : '-' },
+        { property: 'bestlap', header: 'Best lap', render: ({ bestlap }) => bestlap ? msToTime(bestlap) : '-' },
         { property: 'gap', header: 'Gap', render: ({ gap }) => gap ? msToTime(gap) : '-' },
     ];
 
@@ -45,17 +44,19 @@ const Result = () => {
             { 
                 property: 'timeFinished', 
                 header: 'Time/Retired', 
-                render: ({timeFinished, timeFinishedGap, position, laps}) => (
-                    !timeFinishedGap && position > 1 
-                        ? `+${result.lastedLaps - laps} laps`
-                        : !timeFinishedGap && position === 1
-                            ? msToTime(timeFinished)
-                            : `+${msToTime(timeFinishedGap)}`
+                render: ({time, timeGap, position, laps}) => (
+                    position === 1
+                        ? msToTime(time)
+                        : result.lastedLaps > laps
+                            ? `+${result.lastedLaps - laps} laps`
+                            : timeGap
+                                ? `+${msToTime(timeGap)}`
+                                : '-'
                 ),
             },
-            { property: 'bestLap', header: 'Best lap', render: ({ bestLap }) => bestLap ? msToTime(bestLap) : '-' },
-            { property: 'consistency', header: 'Consistency', render: ({ consistency }) => `${consistency}%` },
-            { property: 'led', header: 'Led', align: 'center', render: () => '-' },
+            { property: 'bestlap', header: 'Best lap', render: ({ bestlap }) => bestlap ? msToTime(bestlap) : '-' },
+            // { property: 'consistency', header: 'Consistency', render: ({ consistencyPc }) => `${consistencyPc.toFixed(2)}%` },
+            { property: 'led', header: 'Led', align: 'center', render: ({ led }) => led },
         ];
     }
 

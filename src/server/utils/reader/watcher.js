@@ -1,12 +1,10 @@
-const config = require('../../../../config.json');
-const moment = require('moment');
-const watch = require('watch');
-const path = require('path');
-const fs = require('fs');
+import moment from 'moment';
+import watch from 'watch';
+import path from 'path';
+import fs from 'fs';
 
 const WatchOptions = {
     ignoreDotFiles: true,
-    interval: config.watchIntervalSeconds,
 };
 
 const ReadOptions = {
@@ -20,6 +18,7 @@ class ResultsWatcher {
     constructor(config) {
         this.resultsFolder = process.env.RESULTS_PATH || config.resultsFolder;
         this.monitor = null;
+        this.config = config;
         this.watching = false;
         this.callbacks = [];
     }
@@ -30,7 +29,9 @@ class ResultsWatcher {
         }
 
         const files = fs.readdirSync(this.resultsFolder);
-        return files.map(file => this._parseResultsInfo(file));
+        return files
+            .filter(file => path.extname(file) === '.json')
+            .map(file => this._parseResultsInfo(file));
     }
 
     watch () {
@@ -42,9 +43,18 @@ class ResultsWatcher {
             throw new Error(`[ERR] No such folder: ${this.resultsFolder}`);
         }
 
-        watch.createMonitor(this.resultsFolder, WatchOptions, (monitor) => {
+        const watchOptions = {
+            ...WatchOptions,
+            watchIntervalSeconds: this.config.watchIntervalSeconds,
+        };
 
-            monitor.on('created', filePath => this.onFolderChange(filePath));
+        watch.createMonitor(this.resultsFolder, watchOptions, (monitor) => {
+
+            monitor.on('created', filePath => {
+                if (path.extname(filePath) === '.json') {
+                    this.onFolderChange(filePath);
+                }
+            });
             
             this.monitor = monitor;
             this.watching = true;
@@ -79,7 +89,7 @@ class ResultsWatcher {
                 fs.readFileSync(
                     path.join(this.resultsFolder, file),
                     ReadOptions,
-                ),
+                )
             ),
         };
     }
@@ -96,4 +106,4 @@ class ResultsWatcher {
     }
 }
 
-module.exports = new ResultsWatcher(config);
+export default ResultsWatcher;
