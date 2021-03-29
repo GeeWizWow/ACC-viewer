@@ -250,6 +250,8 @@ export default class SimresultsMediator {
 
                 const positions = map(participants, part => {
 
+                    const id = `${part.getDriver().getName()} (${part.getVehicle().getName()})`
+
                     const data = reduce(
                         rest(range(session.getLastedLaps())), 
                         (agg, index) => {
