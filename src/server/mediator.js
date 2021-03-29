@@ -1,5 +1,5 @@
 import { SessionType } from 'simresults';
-import { map, indexBy, range, rest, first, reduce } from 'underscore';
+import { map, indexBy, range, rest, first, reduce, each } from 'underscore';
 
 export default class SimresultsMediator {
 
@@ -18,7 +18,7 @@ export default class SimresultsMediator {
                 id: this._getEventId(event),
                 track: session.getTrack().getVenue(),
                 time: session.getDate(),
-                sessions: event.map(s => s.getType()),
+                sessions: map(event, s => s.getType()),
             };
         });
 
@@ -240,6 +240,35 @@ export default class SimresultsMediator {
         return indexBy(events, 'id');
     }
 
+    getConsistencyData() {
+        const events = map(this.resultsParser.getAllResults(), event => {
+            const sessions = map(event, session => {
+
+                const consistency = map(session.getParticipants(), part => {
+
+                    return {
+                        driver: part.getDriver().getName(),
+                        car: part.getVehicle().getName(),
+                        consistency: part.getConsistency(),
+                        consistencyPc: part.getConsistencyPercentage(),
+                    };
+                });
+
+                return {
+                    type: session.getType(),
+                    consistency: consistency,
+                };
+            });
+
+            return {
+                id: this._getEventId(event),
+                data: indexBy(sessions, 'type'),
+            };
+        });
+
+        return indexBy(events, 'id');
+    }
+
     getPositionsData () {
         const events = map(this.resultsParser.getAllResults(), event => {
             const sessions = map(event, session => {
@@ -284,24 +313,55 @@ export default class SimresultsMediator {
 
         return indexBy(events, 'id');
     }
+    
 
-    getConsistencyData() {
+    getGapsData() {
         const events = map(this.resultsParser.getAllResults(), event => {
             const sessions = map(event, session => {
 
-                const consistency = map(session.getParticipants(), part => {
+                const sessionType = session.getType();
+                const isRace = sessionType === SessionType.Race;
+                const participants = isRace ? session.getParticipants() : [];
+                const laps = isRace ? range(session.getLastedLaps()) : [];
 
-                    return {
-                        driver: part.getDriver().getName(),
-                        car: part.getVehicle().getName(),
-                        consistency: part.getConsistency(),
-                        consistencyPc: part.getConsistencyPercentage(),
-                    };
+                const gapsByPart = {};
+
+                each(laps, index => {
+
+                    const lapNum = index + 1;
+                    const leader = session.getLeadingParticipantByElapsedTime(lapNum);
+
+                    if (!leader) {
+                        return;
+                    }
+
+                    map(participants, part => {
+
+                        const lap = part.getLap(lapNum);
+                        const gap = lap && lap.getElapsedSeconds() - leader.getLap(lapNum).getElapsedSeconds();
+                        const id = `${part.getDriver().getName()} (${part.getVehicle().getName()})`
+
+                        if (!isNaN(gap)) {
+                            if (!gapsByPart[id]) {
+                                gapsByPart[id] = [];
+                            }
+
+                            gapsByPart[id].push({
+                                x: lapNum,
+                                y: gap,
+                            });
+                        }
+                    });
                 });
+
+                const result = Object.keys(gapsByPart).map(part => ({
+                    id: part,
+                    data: gapsByPart[part],
+                }));
 
                 return {
                     type: session.getType(),
-                    consistency: consistency,
+                    gaps: result,
                 };
             });
 

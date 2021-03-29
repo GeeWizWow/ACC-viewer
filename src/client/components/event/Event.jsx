@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Box, Text, Grid, Image } from 'grommet';
 import { getTrackFlag, getTrackFriendlyName } from '../../helpers/events';
+import { SessionTypes } from '../../helpers/constants';
 import styles from './Event.scss';
 import SessionIcon from '../session-icon/SessionIcon';
-import { map, range } from 'underscore';
-
+import { map, range, contains } from 'underscore';
 
 const Event = ({ track, startTime, sessions, id }) => {
 
@@ -26,6 +26,7 @@ const Event = ({ track, startTime, sessions, id }) => {
             justify={'between'}
             pad={{ right: 'medium' }}
             elevation={'small'}
+            round={'small'}
         >
 
             <Box direction={'row'} align={'center'}>
@@ -50,18 +51,13 @@ const Event = ({ track, startTime, sessions, id }) => {
 
             <Grid 
                 direction={'row'}
-                columns={[ 'flex', 'flex', 'flex' ]}
+                columns={[ '24px', '24px', '24px' ]}
                 gap={'small'}
             >
-                {map(sessions, s => 
-                    <SessionIcon 
-                        key={s}
-                        sessionType={s} 
-                    />
-                )}
-                {map(range(3 - sessions.length), (i) =>
-                    <SessionIcon key={i} />
-                )}
+                <SessionIcon sessionType={contains(sessions, SessionTypes.FP) && SessionTypes.FP} />
+                <SessionIcon sessionType={contains(sessions, SessionTypes.Q) && SessionTypes.Q} />
+                <SessionIcon sessionType={contains(sessions, SessionTypes.R) && SessionTypes.R} />
+               
             </Grid>
 
         </Box>

@@ -18,6 +18,7 @@ export default class SimresultsController {
             results: this.getResultsViewModel(),
             sectors: this.getSectorsViewModel(),
             consistency: this.getConsistencyViewModel(),
+            gaps: this.getGapsViewModel(),
         };
     }
 
@@ -120,6 +121,21 @@ export default class SimresultsController {
         }
 
         const value = this.simresultsMediator.getConsistencyData();
+
+        this.cache.set(cacheKey, value);
+        
+        return value;
+    }
+
+    getGapsViewModel() {
+        const cacheKey = 'getGapsViewModel';
+        const cachedValue = this.cache.get(cacheKey);
+
+        if (cachedValue) {
+            return cachedValue;
+        }
+
+        const value = this.simresultsMediator.getGapsData();
 
         this.cache.set(cacheKey, value);
         

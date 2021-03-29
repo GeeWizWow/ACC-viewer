@@ -25,7 +25,7 @@ const SessionIcon = ({ sessionType }) => {
         <JustTheTip sessionType={sessionType}>
             <Text
                 weight={'bold'}
-                textAlign={'end'}
+                textAlign={'center'}
                 color={getSessionColor(sessionType)}
             >
                 {getSessionSymbol(sessionType) || 'X'}

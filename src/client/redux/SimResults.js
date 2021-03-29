@@ -16,6 +16,7 @@ const initialState = {
     consistency: {},
     results: {},
     sectors: {},
+    gaps: {},
 };
 
 export default function (state = initialState, action) {
@@ -26,7 +27,7 @@ export default function (state = initialState, action) {
 
                 case 'EVENTS': {
 
-                    const { allLaps, bestLaps, events, positions, sectors, results, consistency } = action.payload.data;
+                    const { allLaps, bestLaps, events, positions, sectors, results, consistency, gaps } = action.payload.data;
 
                     return {
                         ...state,
@@ -37,6 +38,7 @@ export default function (state = initialState, action) {
                         results,
                         sectors,
                         consistency,
+                        gaps,
                         keyedEvents: indexBy(events, 'id'),
                     };
                 }
@@ -83,11 +85,6 @@ export const getResultsBySession = (state, eventId, sessionType) => {
     return event && event.data && event.data[sessionType];
 };
 
-export const getRacePositionsBySession = (state, eventId, sessionType) => {
-    const event = getState(state).positions[eventId];
-    return event && event.data && event.data[sessionType] && event.data[sessionType].positions;
-};
-
 export const getSectorsBySession = (state, eventId, sessionType) => {
     const event = getState(state).sectors[eventId];
     return event && event.data && event.data[sessionType] && event.data[sessionType].sectors;
@@ -96,6 +93,16 @@ export const getSectorsBySession = (state, eventId, sessionType) => {
 export const getConsistencyBySession = (state, eventId, sessionType) => {
     const event = getState(state).consistency[eventId];
     return event && event.data && event.data[sessionType] && event.data[sessionType].consistency;
+};
+
+export const getRacePositionsBySession = (state, eventId, sessionType) => {
+    const event = getState(state).positions[eventId];
+    return event && event.data && event.data[sessionType] && event.data[sessionType].positions;
+};
+
+export const getRaceGapsBySession = (state, eventId, sessionType) => {
+    const event = getState(state).gaps[eventId];
+    return event && event.data && event.data[sessionType] && event.data[sessionType].gaps;
 };
 //#endregion
 

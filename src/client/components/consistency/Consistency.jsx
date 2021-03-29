@@ -10,10 +10,12 @@ const Consistency = () => {
     const { id, sessionType } = useParams();
     const consistency = useSelector(s => getConsistencyBySession(s, id, sessionType));
 
+    console.log(consistency)
+
     return (
         <Box>
-            <Box background={'background-front'} elevation={'small'}>
-                <Box background={'background-header'} pad={'small'} border={'bottom'}>
+            <Box background={'background-front'} elevation={'small'} round={'small'} round={'small'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'} round={{ corner: 'top', size: 'small' }}>
                     <Text weight={'bold'}>
                         Consistency
                     </Text>
@@ -45,17 +47,17 @@ const Consistency = () => {
                     <TableBody>
                         {map(consistency, (d, index) => 
                             <TableRow key={d.driver}>
-                                <TableCell scope={'row'} border={index !== d.length - 1 && 'bottom'}>
+                                <TableCell scope={'row'} border={index !== consistency.length - 1 && 'bottom'}>
                                     <Text size={'small'}>
                                         {d.driver}
                                     </Text>
                                 </TableCell>
-                                <TableCell scope={'row'} border={index !== d.length - 1 && 'bottom'}>
+                                <TableCell scope={'row'} border={index !== consistency.length - 1 && 'bottom'}>
                                     <Text size={'small'}>
                                         {d.car}
                                     </Text>
                                 </TableCell>
-                                <TableCell scope={'row'} border={index !== d.length - 1 && 'bottom'}>
+                                <TableCell scope={'row'} border={index !== consistency.length - 1 && 'bottom'}>
                                     <Text size={'small'}>
                                         {!d.consistency
                                             ? '-'

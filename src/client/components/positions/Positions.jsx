@@ -14,7 +14,7 @@ const Positions = () => {
 
     return (
         <Box>
-            <Box height={'600px'} background={'background-front'} elevation={'small'}>
+            <Box height={'600px'} background={'background-front'} elevation={'small'} round={'small'}>
 
                 <NivoChart data={positions} theme={theme} />
 

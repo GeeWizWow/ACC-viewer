@@ -44,8 +44,8 @@ const AllLaps = () => {
                 
                 <Fragment key={d.name}>
 
-                    <Box background={'background-front'} elevation={'small'}>
-                        <Box background={'background-header'} pad={'small'} border={'bottom'}>
+                    <Box background={'background-front'} elevation={'small'} round={'small'}>
+                        <Box background={'background-header'} pad={'small'} border={'bottom'} round={{ corner: 'top', size: 'small' }}>
                             <Text weight={'bold'}>
                                 {d.name}
                             </Text>
@@ -56,7 +56,7 @@ const AllLaps = () => {
 
                                     <TableCell scope={'col'} border={'bottom'} />
 
-                                    <TableCell scope={'col'} border={'bottom'} align={'center'}>
+                                    <TableCell scope={'col'} border={'bottom'}>
                                         <Text size={'small'} weight={'bold'}>
                                             Lap
                                         </Text>
@@ -98,7 +98,7 @@ const AllLaps = () => {
                                     <TableRow key={lap.no}>
                                         <TableCell 
                                             scope={'row'} 
-                                            border={[ 'bottom', 'right' ]} 
+                                            border={'bottom'}
                                             background={getLapColor(lap, sessionType)} 
                                             align={'center'}
                                         >
@@ -109,7 +109,7 @@ const AllLaps = () => {
                                             />
                                         </TableCell>
 
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)} align={'center'}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
                                             <Text size={'small'}>
                                                 {lap.no}
                                             </Text>

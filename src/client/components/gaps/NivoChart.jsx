@@ -1,20 +1,21 @@
 import React from 'react';
 import { ResponsiveLine } from '@nivo/line'
 import { Box, Text } from 'grommet';
+import { msToTime } from '../../helpers/events';
 import Dot from '../dot/Dot'
 
 export default ({ data, theme }) => (
     <ResponsiveLine
         data={data}
-        margin={{ top: 30, right: 30, bottom: 130, left: 30 }}
+        margin={{ top: 30, right: 30, bottom: 130, left: 50 }}
         colors={{ scheme: theme === 'dark' ? 'accent' : 'nivo' }}
         xScale={{ 
             type: 'linear', 
-            min: '2',
+            min: '1',
         }}
         yScale={{ 
             type: 'linear', 
-            min: '1', 
+            min: '0', 
             reverse: true,
         }}
         axisTop={null}
@@ -31,12 +32,12 @@ export default ({ data, theme }) => (
             tickSize: 0,
             tickPadding: 10,
             tickRotation: 0,
-            format: tick => tick % 1 === 0 ? tick : '',
+            format: tick => tick % 1 === 0 ? `${tick}s` : '',
         }}
         theme={{
             textColor: theme === 'dark' ? '#EEEEEE' : '#333333',
         }}
-        tooltip={({ point: { serieColor, serieId, data: { x: lap, y: pos }}}) => 
+        tooltip={({ point: { serieColor, serieId, data: { x: lap, y: gap }}}) => 
             <Box pad={'xsmall'} background={'white'} round={'xsmall'}>
                 <Box direction={'row'} gap={'small'} align={'center'}>
                     <Dot color={serieColor} />
@@ -49,12 +50,12 @@ export default ({ data, theme }) => (
                     <Text size={'small'}>{lap}</Text>
                 </Box>
                 <Box direction={'row'} gap={'small'}>
-                    <Text size={'small'} weight={'bold'}>Positon:</Text>
-                    <Text size={'small'}>{pos}</Text>
+                    <Text size={'small'} weight={'bold'}>Gap:</Text>
+                    <Text size={'small'}>{msToTime(gap)}</Text>
                 </Box>
             </Box>
         }
-        pointSize={10}
+        pointSize={0}
         pointColor={{ theme: 'background' }}
         pointBorderWidth={2}
         pointBorderColor={{ from: 'serieColor' }}

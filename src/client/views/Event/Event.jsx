@@ -16,7 +16,7 @@ import BestLaps from '../../components/best-laps/BestLaps';
 import Consistency from '../../components/consistency/Consistency';
 import Sectors from '../../components/sectors/Sectors';
 import Positions from '../../components/positions/Positions';
-// import Gaps from '../../components/gaps/Gaps';
+import Gaps from '../../components/gaps/Gaps';
 
 
 const getSessionCategories = (sessionType) => {
@@ -38,7 +38,7 @@ const getSessionCategories = (sessionType) => {
             return [
                 ...defaults,
                 { label: 'Positions', href: 'positions', component: Positions },
-                // { label: 'Gaps', href: 'gaps', component: Gaps },
+                { label: 'Gaps', href: 'gaps', component: Gaps },
             ];
         }
     }
@@ -76,22 +76,17 @@ const Event = () => {
                 gap={'medium'}
             >
 
-                <Box background={'background-front'} pad={'small'} gap={'large'} elevation={'small'}>
+                <Box background={'background-front'} pad={'small'} gap={'large'} elevation={'small'} round={'small'}>
                     <Nav gap="small">
 
                         {map(event.sessions, s => 
                             <Fragment key={s}>
-                                <Heading 
-                                    level={4} 
-                                    size={'medium'}
-                                    margin={{ 
-                                        vertical: 'small'
-                                    }}
-                                >
+                                <Box direction={'row'} gap={'small'} pad={'xsmall'}>
                                     <SessionIcon sessionType={s} />
-                                    {' - '}
-                                    {getSessionName(s)}
-                                </Heading>
+                                    <Heading level={4} size={'medium'} margin={{ vertical: 'none' }}>
+                                        {getSessionName(s)}
+                                    </Heading>
+                                </Box>
 
                                 {map(getSessionCategories(s), category =>
                                     <Link 

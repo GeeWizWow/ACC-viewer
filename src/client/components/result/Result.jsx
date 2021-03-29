@@ -63,8 +63,8 @@ const Result = () => {
     return (
         <Box>
 
-            <Box background={'background-front'} elevation={'small'}>
-                <Box background={'background-header'} pad={'small'} border={'bottom'}>
+            <Box background={'background-front'} elevation={'small'} round={'small'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'} round={{ corner: 'top', size: 'small' }}>
                     <Text weight={'bold'}>
                         Session Results
                     </Text>
@@ -93,8 +93,8 @@ const Result = () => {
 
             <Box margin={'small'} />
 
-            <Box background={'background-front'} elevation={'small'}>
-                <Box background={'background-header'} pad={'small'} border={'bottom'}>
+            <Box background={'background-front'} elevation={'small'} round={'small'}>
+                <Box background={'background-header'} pad={'small'} border={'bottom'} round={{ corner: 'top', size: 'small' }}>
                     <Text weight={'bold'}>
                         Leaderboard
                     </Text>
