@@ -2,3 +2,4 @@ node_modules
 npm-debug.log
 test_data
 .vscode
+acc_viewer.tar

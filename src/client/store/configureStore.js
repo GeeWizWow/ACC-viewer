@@ -17,13 +17,19 @@ const logger = createLogger({
 export default (initialState = {}) => {
 
     const reducer = combineReducers({ ...rootReducer });
+    const middleware = [
+        thunk,
+        socketMiddleware,
+    ];
+
+    if (process.env.NODE_ENV !== 'production') {
+        middleware.unshift(logger);
+    }
     
     const store = configureStore({
         middleware: (getDefaultMiddleware) => [
             ...getDefaultMiddleware(),
-            logger,
-            thunk,
-            socketMiddleware,
+            ...middleware,    
         ],
         devTools: process.env.NODE_ENV !== 'production',
         preloadedState: initialState,

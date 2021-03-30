@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import moment from 'moment';
 import SessionIcon from '../../components/session-icon/SessionIcon';
 import { map } from 'underscore';
-import { Link, Route, Switch, useParams, useRouteMatch, Redirect } from 'react-router-dom';
+import { Link, Route, Switch, useParams, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getEventById } from '../../redux/SimResults';
 import { getSessionName } from '../../helpers/events';
@@ -17,7 +17,6 @@ import Consistency from '../../components/consistency/Consistency';
 import Sectors from '../../components/sectors/Sectors';
 import Positions from '../../components/positions/Positions';
 import Gaps from '../../components/gaps/Gaps';
-
 
 const getSessionCategories = (sessionType) => {
     const defaults = [
@@ -46,9 +45,7 @@ const getSessionCategories = (sessionType) => {
 
 const Event = () => {
 
-    const { id } = useParams();
-    const { url, path } = useRouteMatch();
-
+    const { id, sessionType, view } = useParams();
     const event = useSelector(s => getEventById(s, id));
 
     if (!event) {
@@ -91,7 +88,7 @@ const Event = () => {
                                 {map(getSessionCategories(s), category =>
                                     <Link 
                                         key={category.href}
-                                        to={`${url}/${s}/${category.href}`}
+                                        to={`/event/${id}/${s}/${category.href}`}
                                     >
                                         <Anchor
                                             icon={( <FormNext /> )}
@@ -100,6 +97,11 @@ const Event = () => {
                                             weight={'normal'}
                                             color={'text-weak'}
                                             label={category.label}
+                                            weight={
+                                                (s === sessionType && category.href === view)
+                                                    ? 'bold'
+                                                    : 'normal'
+                                            }
                                         />
                                     </Link>
                                 
@@ -117,13 +119,13 @@ const Event = () => {
                         {map(event.sessions, s => 
                             map(getSessionCategories(s), category =>
                                 <Route 
-                                    path={`${path}/:sessionType/${category.href}`}
+                                    path={`/event/:id/:sessionType/${category.href}`}
                                     component={category.component}
                                 />
                             )
                         )}      
 
-                        <Redirect to={`${path}/${event.sessions[0]}/result`} />
+                        <Redirect to={`/event/${id}/${event.sessions[0]}/result`} />
 
                     </Switch>
                 </Box>

@@ -10,8 +10,6 @@ const Consistency = () => {
     const { id, sessionType } = useParams();
     const consistency = useSelector(s => getConsistencyBySession(s, id, sessionType));
 
-    console.log(consistency)
-
     return (
         <Box>
             <Box background={'background-front'} elevation={'small'} round={'small'} round={'small'}>
