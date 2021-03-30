@@ -25,13 +25,13 @@ export const getSessionSymbol = (sessionType) => {
 export const getSessionColor = (sessionType) => {
     switch (sessionType) {
         case SessionTypes.FP:
-            return 'neutral-4';
+            return 'session-fp';
         case SessionTypes.Q:
-            return 'neutral-3';
+            return 'session-q';
         case SessionTypes.R:
-            return 'neutral-1';
+            return 'session-r';
         default:
-            return 'status-disabled';
+            return 'session-none';
     }
 };
 

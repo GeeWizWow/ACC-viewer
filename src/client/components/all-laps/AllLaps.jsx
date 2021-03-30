@@ -14,12 +14,12 @@ const getLapColor = (lap, sessionType) => {
     // }
 
     return !lap.time
-        ? 'neutral-4'
+        ? 'lap-invalid'
         : lap.isOverallBest
-        ? 'brand'
-        : lap.isPersonalBest
-            ? 'neutral-3'
-            : null;
+            ? 'lap-sb'
+            : lap.isPersonalBest
+                ? 'lap-pb'
+                : null;
 };
 
 const getSectorProps = (lap, sector) => {
@@ -28,8 +28,8 @@ const getSectorProps = (lap, sector) => {
     }
 
     return {
-        weight: sector.isOverallBest ? 'bold' : null,
-        color: sector.isPersonalBest ? 'status-ok' : null,
+        weight: sector.isPersonalBest ? 'bold' : null,
+        textDecoration: sector.isOverallBest ? 'underline' : null,
     };
 };
 
@@ -56,7 +56,7 @@ const AllLaps = () => {
 
                                     <TableCell scope={'col'} border={'bottom'} />
 
-                                    <TableCell scope={'col'} border={'bottom'}>
+                                    <TableCell scope={'col'} border={'bottom'} align={'center'}>
                                         <Text size={'small'} weight={'bold'}>
                                             Lap
                                         </Text>
@@ -109,7 +109,7 @@ const AllLaps = () => {
                                             />
                                         </TableCell>
 
-                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)}>
+                                        <TableCell scope={'row'} border={'bottom'} background={getLapColor(lap, sessionType)} align={'center'}>
                                             <Text size={'small'}>
                                                 {lap.no}
                                             </Text>

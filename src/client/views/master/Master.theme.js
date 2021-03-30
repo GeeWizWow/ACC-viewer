@@ -68,6 +68,20 @@ export default {
             'status-disabled': '#CCCCCC',
             'graph-0': 'brand',
             'graph-1': 'status-warning',
+
+            'session-fp': 'neutral-4',
+            'session-q': 'neutral-3',
+            'session-r': 'neutral-1',
+            'session-none': 'status-disabled',
+
+            'lap-invalid': '#fb9a99',
+            'lap-invalid-label': '#e31a1c',
+            'lap-sb': '#cab2d6',
+            'lap-sb-label': '#6a3d9a',
+            'lap-pb': '#b2df8a',
+            'lap-pb-label': '#33a02c',
+
+            'sector-pb': '#ff7f00',
         },
         font: {
             family: 'Helvetica',
@@ -100,14 +114,14 @@ export default {
             background: 'background-contrast',
         },
     },
-    box: {
-        extend: {
-            // overflow: 'hidden',
-        },
-    },
     tip: {
         content: {
             background: 'white',
         },
+    },
+    text: {
+        extend: (props) => ({
+            textDecoration: props.textDecoration,
+        }),
     },
 };

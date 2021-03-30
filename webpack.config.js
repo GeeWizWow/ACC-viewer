@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const outputDirectory = 'dist';
 
@@ -13,6 +14,10 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /react-spring/,
+                sideEffects: true,
+            },
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
@@ -56,6 +61,7 @@ module.exports = {
         },
     },
     plugins: [
+        new MomentLocalesPlugin(),
         new CleanWebpackPlugin([
             outputDirectory,
             'serverdist'
