@@ -7,9 +7,9 @@ import { getTrackFlag, getTrackFriendlyName } from '../../helpers/events';
 import { SessionTypes } from '../../helpers/constants';
 import styles from './Event.scss';
 import SessionIcon from '../session-icon/SessionIcon';
-import { map, range, contains } from 'underscore';
+import { contains } from 'underscore';
 
-const Event = ({ track, startTime, sessions, id }) => {
+const Event = ({ track, time, sessions, id }) => {
 
     const history = useHistory();
     const onClick = useCallback(() => history.push(`/event/${id}/${sessions[0]}/result`), [ id ]);
@@ -43,7 +43,7 @@ const Event = ({ track, startTime, sessions, id }) => {
                         {getTrackFriendlyName(track)}
                     </Text>
                     <Text size={'small'} color={'text-weak'}>
-                        {moment(startTime).format('lll')}
+                        {moment(time).format('lll')}
                     </Text>
                 </Box>
             </Box>
