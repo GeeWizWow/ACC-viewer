@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default ({ color }) => (
+export default ({ color, size }) => (
     <div 
         style={{
             borderRadius: '99%',
-            width: '10px',
-            height: '10px',
+            width: size ? `${size}px` : '10px',
+            height: size ? `${size}px` : '10px',
             backgroundColor: color,
         }}
     />

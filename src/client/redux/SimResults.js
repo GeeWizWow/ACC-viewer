@@ -16,6 +16,7 @@ const initialState = {
     consistency: {},
     results: {},
     sectors: {},
+    penalties: {},
     gaps: {},
 };
 
@@ -27,7 +28,7 @@ export default function (state = initialState, action) {
 
                 case 'EVENTS': {
 
-                    const { allLaps, bestLaps, events, positions, sectors, results, consistency, gaps } = action.payload.data;
+                    const { allLaps, bestLaps, events, positions, sectors, results, consistency, gaps, penalties } = action.payload.data;
 
                     return {
                         ...state,
@@ -39,6 +40,7 @@ export default function (state = initialState, action) {
                         sectors,
                         consistency,
                         gaps,
+                        penalties: penalties,
                         keyedEvents: indexBy(events, 'id'),
                     };
                 }
@@ -103,6 +105,17 @@ export const getRacePositionsBySession = (state, eventId, sessionType) => {
 export const getRaceGapsBySession = (state, eventId, sessionType) => {
     const event = getState(state).gaps[eventId];
     return event && event.data && event.data[sessionType] && event.data[sessionType].gaps;
+};
+
+export const getPenaltiesBySession = (state, eventId, sessionType) => {
+    const event = getState(state).penalties[eventId];
+    return event && event.data && event.data[sessionType] && event.data[sessionType].penalties;
+};
+
+export const hasPenaltiesBySession = (state, eventId, sessionType) => {
+    const event = getState(state).penalties[eventId];
+    const penalties = event && event.data && event.data[sessionType] && event.data[sessionType].penalties;
+    return Boolean(penalties && penalties.length);
 };
 //#endregion
 

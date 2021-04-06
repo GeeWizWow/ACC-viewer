@@ -1,8 +1,21 @@
+import { colorSchemes } from '@nivo/colors';
+
+export const getColorScheme = (theme) => {
+    const name = theme === 'dark' ? 'accent' : 'nivo';
+    const scheme = theme === 'dark' ? colorSchemes.accent : colorSchemes.nivo;
+
+    return { name, scheme };
+};
+
+export const getLegendColor = (theme, index) => {
+    const { scheme } = getColorScheme(theme);
+    return scheme[index % scheme.length];
+};
 
 export const getDefaultProps = (theme) => {
     return {
         colors: {
-            scheme: theme === 'dark' ? 'accent' : 'nivo',
+            scheme: getColorScheme(theme).name,
         },
         theme: {
             textColor: theme === 'dark' ? '#EEEEEE' : '#333333',
@@ -11,16 +24,12 @@ export const getDefaultProps = (theme) => {
                     stroke:  theme === 'dark' ? 'rgba(221, 221, 221, 0.2)' : 'rgb(221, 221, 221)',
                 },
             },
-            legends: {
-                text: {
-                    fill: theme === 'dark' ? '#EEEEEE' : '#333333',
-                },
-            },
         },
+        curve: 'monotoneX',
         margin: {
             top: 30, 
             right: 30, 
-            bottom: 130, 
+            bottom: 30, 
             left: 50,
         },
         axisTop: null,
@@ -39,24 +48,24 @@ export const getDefaultProps = (theme) => {
             tickRotation: 0,
             format: tick => tick % 1 === 0 ? tick : '',
         },
-        pointSize: 0,
+        enablePoints: false,
         useMesh: true,
-        legends: [
-            {
-                anchor: 'bottom-left',
-                direction: 'column',
-                justify: false,
-                translateX: 0,
-                translateY: 110,
-                itemsSpacing: 0,
-                itemDirection: 'left-to-right',
-                itemWidth: 80,
-                itemHeight: 20,
-                itemOpacity: 0.75,
-                symbolSize: 12,
-                symbolShape: 'circle',
-                symbolBorderColor: 'rgba(0, 0, 0, .5)',
-            },
-        ],
+        // legends: [
+        //     {
+        //         anchor: 'top-right',
+        //         direction: 'column',
+        //         justify: false,
+        //         translateX: 0,
+        //         translateY: 0,
+        //         itemsSpacing: 0,
+        //         itemDirection: 'left-to-right',
+        //         itemWidth: 80,
+        //         itemHeight: 20,
+        //         itemOpacity: 0.75,
+        //         symbolSize: 12,
+        //         symbolShape: 'circle',
+        //         symbolBorderColor: 'rgba(0, 0, 0, .5)',
+        //     },
+        // ],
     };
 };

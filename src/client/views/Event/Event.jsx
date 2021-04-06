@@ -4,7 +4,7 @@ import SessionIcon from '../../components/session-icon/SessionIcon';
 import { map } from 'underscore';
 import { Link, Route, Switch, useParams, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getEventById } from '../../redux/SimResults';
+import { getEventById, hasPenaltiesBySession } from '../../redux/SimResults';
 import { getSessionName } from '../../helpers/events';
 import { SessionTypes } from '../../helpers/constants';
 import { Box, Heading, Text, Nav, Grid, Anchor } from 'grommet';
@@ -17,8 +17,9 @@ import Consistency from '../../components/consistency/Consistency';
 import Sectors from '../../components/sectors/Sectors';
 import Positions from '../../components/positions/Positions';
 import Gaps from '../../components/gaps/Gaps';
+import Penalties from '../../components/Penalties/Penalties';
 
-const getSessionCategories = (sessionType) => {
+const getSessionCategories = (sessionType, hasPenalties) => {
     const defaults = [
         { label: 'Result', href: 'result', component: Result },
         { label: 'All Laps', href: 'laps', component: AllLaps },
@@ -26,6 +27,12 @@ const getSessionCategories = (sessionType) => {
         { label: 'Consistency', href: 'consistency', component: Consistency },
         { label: 'Sectors', href: 'sectors', component: Sectors },
     ];
+
+    if (hasPenalties) {
+        defaults.push(
+            { label: 'Penalties', href: 'penalties', component: Penalties },
+        );
+    }
 
     switch (sessionType) {
         case SessionTypes.FP:
@@ -47,6 +54,7 @@ const Event = () => {
 
     const { id, sessionType, view } = useParams();
     const event = useSelector(s => getEventById(s, id));
+    const hasPenalties = useSelector(s => hasPenaltiesBySession(s, id, SessionTypes.R));
 
     if (!event) {
         return null;
@@ -85,7 +93,7 @@ const Event = () => {
                                     </Heading>
                                 </Box>
 
-                                {map(getSessionCategories(s), category =>
+                                {map(getSessionCategories(s, hasPenalties), category =>
                                     <Link 
                                         key={category.href}
                                         to={`/event/${id}/${s}/${category.href}`}
@@ -117,7 +125,7 @@ const Event = () => {
                     <Switch>
 
                         {map(event.sessions, s => 
-                            map(getSessionCategories(s), category =>
+                            map(getSessionCategories(s, hasPenalties), category =>
                                 <Route 
                                     path={`/event/:id/:sessionType/${category.href}`}
                                     component={category.component}

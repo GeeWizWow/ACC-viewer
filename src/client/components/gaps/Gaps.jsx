@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getRaceGapsBySession } from '../../redux/SimResults';
 import { getTheme } from '../../redux/App';
 import { Box } from 'grommet';
+import ChartLegends from '../chart-legends/ChartLegends';
 
 const Gaps = () => {
 
@@ -14,10 +15,9 @@ const Gaps = () => {
 
     return (
         <Box>
-            <Box height={'600px'} background={'background-front'} elevation={'small'} round={'small'}>
-
+            <Box background={'background-front'} elevation={'small'} round={'small'}>
                 <NivoChart data={gaps} theme={theme} />
-
+                <ChartLegends data={gaps} theme={theme} />
             </Box>
         </Box>
     );

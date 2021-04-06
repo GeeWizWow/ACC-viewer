@@ -374,6 +374,42 @@ export default class SimresultsMediator {
         return indexBy(events, 'id');
     }
 
+    getPenaltiesData () {
+        const events = map(this.resultsParser.getAllResults(), event => {
+            const sessions = map(event, session => {
+
+                const penalties = map(session.getPenalties(), penalty => {
+
+                    const lap = penalty.getLap();
+                    const servedLap = penalty.getServedLap();
+                    const participant = penalty.getParticipant();
+
+                    return {
+                        lap: lap && lap.getNumber(),
+                        servedLap: servedLap && servedLap.getNumber(),
+                        served: penalty.isServed(),
+                        reason: penalty.getReason(),
+                        penalty: penalty.getPenalty(),
+                        driver: participant.getDriver().getName(),
+                        car: participant.getVehicle().getName(),
+                    };
+                });
+
+                return {
+                    type: session.getType(),
+                    penalties: penalties,
+                };
+            });
+
+            return {
+                id: this._getEventId(event),
+                data: indexBy(sessions, 'type'),
+            };
+        });
+
+        return indexBy(events, 'id');
+    }
+
     _getEventId (sessions) {
         const allSessions = [].concat(sessions);
         const dateStr = first(allSessions).getDate().toJSON();

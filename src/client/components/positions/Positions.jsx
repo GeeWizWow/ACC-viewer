@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { getRacePositionsBySession } from '../../redux/SimResults';
 import { getTheme } from '../../redux/App';
 import { Box } from 'grommet';
+import ChartLegends from '../chart-legends/ChartLegends';
 
 const Positions = () => {
 
@@ -14,10 +15,9 @@ const Positions = () => {
 
     return (
         <Box>
-            <Box height={'600px'} background={'background-front'} elevation={'small'} round={'small'}>
-
+            <Box background={'background-front'} elevation={'small'} round={'small'}>
                 <NivoChart data={positions} theme={theme} />
-
+                <ChartLegends data={positions} theme={theme} />
             </Box>
         </Box>
     );

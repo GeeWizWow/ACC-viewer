@@ -19,6 +19,7 @@ export default class SimresultsController {
             sectors: this.getSectorsViewModel(),
             consistency: this.getConsistencyViewModel(),
             gaps: this.getGapsViewModel(),
+            penalties: this.getPenaltiesViewModel(),
         };
     }
 
@@ -136,6 +137,21 @@ export default class SimresultsController {
         }
 
         const value = this.simresultsMediator.getGapsData();
+
+        this.cache.set(cacheKey, value);
+        
+        return value;
+    }
+
+    getPenaltiesViewModel() {
+        const cacheKey = 'getPenaltiesViewModel';
+        const cachedValue = this.cache.get(cacheKey);
+
+        if (cachedValue) {
+            return cachedValue;
+        }
+
+        const value = this.simresultsMediator.getPenaltiesData();
 
         this.cache.set(cacheKey, value);
         

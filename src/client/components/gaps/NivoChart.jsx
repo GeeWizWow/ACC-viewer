@@ -2,6 +2,7 @@ import React from 'react';
 import { ResponsiveLine } from '@nivo/line'
 import { getDefaultProps } from '../../helpers/charts';
 import { msToTime } from '../../helpers/events';
+import { Box } from 'grommet';
 import ChartTooltip from '../chart-tooltip/ChartTooltip';
 
 export default ({ data, theme }) => {
@@ -9,7 +10,6 @@ export default ({ data, theme }) => {
     const defaultChartProps = getDefaultProps(theme);
     const chartProps = {
         ...defaultChartProps,
-        data: data,
         xScale: {
             type: 'linear', 
             min: '1',
@@ -36,7 +36,9 @@ export default ({ data, theme }) => {
     };
 
     return (
-        <ResponsiveLine {...chartProps} />
+        <Box height={'500px'}>
+            <ResponsiveLine {...chartProps} data={data} />
+        </Box>
     );
 };
 
