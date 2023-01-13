@@ -1,5 +1,9 @@
 FROM node:14
 
+LABEL org.opencontainers.image.source=https://github.com/GeeWizWow/ACC-viewer
+LABEL org.opencontainers.image.description="ACC Viewer"
+LABEL org.opencontainers.image.licenses=MIT
+
 # Create app directory
 WORKDIR /usr/src/app
 
