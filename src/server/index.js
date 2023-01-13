@@ -8,9 +8,9 @@ import ResultsWatcher from './utils/reader/watcher';
 import Cache from './utils/cache';
 import Mediator from './mediator';
 import Controller from './controller';
+import * as dotenv from 'dotenv';
 
-const configPath = join(process.cwd(), 'config.json');
-const config = JSON.parse(readFileSync(configPath));
+dotenv.config();
 
 const app = express();
 const server = http.createServer(app);
@@ -28,7 +28,7 @@ app.use('/event/:id/:session/:tab', express.static('dist/'));
 const parserCache = new Cache();
 const controllerCache = new Cache();
 
-const watcher = new ResultsWatcher(config);
+const watcher = new ResultsWatcher();
 const parser = new ResultsParser(watcher, parserCache);
 const mediator = new Mediator(parser);
 const controller = new Controller(mediator, controllerCache);

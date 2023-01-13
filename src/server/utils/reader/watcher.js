@@ -16,7 +16,7 @@ const FilenameRegex = /^(?<dateTime>(?<date>\d{6})_(?<time>\d{6}))_(?<sessionTyp
 class ResultsWatcher {
 
     constructor(config) {
-        this.resultsFolder = process.env.RESULTS_PATH || config.resultsFolder;
+        this.resultsFolder = process.env.RESULTS_PATH;
         this.monitor = null;
         this.config = config;
         this.watching = false;
@@ -45,7 +45,7 @@ class ResultsWatcher {
 
         const watchOptions = {
             ...WatchOptions,
-            watchIntervalSeconds: this.config.watchIntervalSeconds,
+            watchIntervalSeconds: process.env.WATCH_INTERVAL_SECONDS,
         };
 
         watch.createMonitor(this.resultsFolder, watchOptions, (monitor) => {

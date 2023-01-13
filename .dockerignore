@@ -1,5 +1,6 @@
 node_modules
 npm-debug.log
-test_data
+test_data/*.json
 .vscode
 acc_viewer.tar
+package-lock.json
