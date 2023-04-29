@@ -31,7 +31,7 @@ export class SocketCall {
 
 const createClient = (store) => {
     const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:'
-    const socket = io(`${protocol}//${window.location.host}`, {
+    const socket = io.default(`${protocol}//${window.location.host}`, {
         path: '/ws',
         autoConnect: false,
         reconnection: true,
